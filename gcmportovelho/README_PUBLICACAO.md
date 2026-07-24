@@ -1,5 +1,5 @@
 # Publicação GPS Studio
 
-Projeto: Apostas Estratégicas — Guarda Municipal de Porto Velho RO
 Slug: gcmportovelho
 URL prevista: https://gcmportovelho.gpsdaaprovacao.com/
+Gerado em: 23/07/2026, 21:50:09
