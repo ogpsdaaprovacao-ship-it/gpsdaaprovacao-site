@@ -1,5 +1,5 @@
 # Publicação GPS Studio
 
 Slug: professores
-URL prevista: https://professores.gpsdaaprovacao.com/
-Gerado em: 13/07/2026, 19:13:52
+URL prevista: https://gpsdaaprovacao.com/professores/
+Gerado em: 24/07/2026, 20:59:05
