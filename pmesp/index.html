@@ -44,4 +44,4 @@ function setup(){
   document.addEventListener('click',function(event){var anchor=event.target.closest&&event.target.closest('a[href]');if(anchor)decorate(anchor,attribution)},true);
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup,{once:true});else setup();
-})();</script></body></html>
+})();</script><script>document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('a[href*="pay.hotmart.com"]').forEach(function(a){a.addEventListener('click',function(){if(typeof fbq!=='undefined'){fbq('track','InitiateCheckout');}})});});</script></body></html>
