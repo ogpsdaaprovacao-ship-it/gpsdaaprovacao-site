@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>GPS da Aprovação — Materiais</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:#1a1a1a;display:flex;justify-content:center;min-height:100vh;font-family:'Montserrat',Arial,sans-serif}
+.page{width:100%;max-width:480px;background:#000;min-height:100vh}
+
+/* HEADER */
+.header{background:#000;text-align:center}
+.gold-bar{height:6px;background:#F6C84C}
+.header-inner{padding:22px 14px 16px}
+.gps-sub{font-size:16px;color:#fff;font-weight:400;letter-spacing:5px}
+.gps-title{font-size:30px;color:#F6C84C;font-weight:700;letter-spacing:2px;line-height:1.1}
+.gps-tag{font-size:9px;color:#555;margin-top:10px;letter-spacing:1px}
+
+/* SECTIONS */
+.section{padding:14px 14px 20px}
+.section:nth-child(odd){background:#0A0A0A}
+.section:nth-child(even){background:#111}
+.cat-label{font-size:11px;color:#F6C84C;font-weight:700;letter-spacing:1px;margin-bottom:10px}
+.cat-divider{height:1px;background:#222;margin-bottom:14px}
+.btn-list{display:flex;flex-direction:column;gap:12px}
+.hub-btn{display:block;width:100%;height:54px;background:#F6C84C;color:#0A0A0A;border:none;border-radius:10px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;text-decoration:none;line-height:54px;text-align:center;padding:0 12px}
+.hub-btn:hover{background:#e0b43a}
+
+/* FOOTER */
+.footer{background:#000;padding:16px 14px;text-align:center}
+.footer .gold-bar{margin-bottom:14px}
+.footer-brand{font-size:11px;color:#F6C84C;font-weight:700}
+.footer-sub{font-size:9px;color:#444;margin-top:4px}
+
+/* ── EDIT MODE ─────────────────────────────────────────────── */
+.edit-fab{position:fixed;bottom:24px;right:24px;z-index:9999;width:50px;height:50px;border-radius:50%;background:#F6C84C;border:none;font-size:22px;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center}
+.edit-fab:hover{background:#e0b43a}
+
+/* edit panel */
+.edit-panel{display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:9998;background:rgba(0,0,0,.92);overflow-y:auto;padding:16px}
+.edit-panel.open{display:block}
+.ep-title{color:#F6C84C;font-size:16px;font-weight:700;margin-bottom:16px;text-align:center}
+
+.ep-block{background:#111;border-radius:10px;padding:14px;margin-bottom:14px;border:1px solid #333}
+.ep-label{font-size:10px;color:#888;font-weight:700;letter-spacing:1px;margin-bottom:8px}
+.ep-input{width:100%;background:#1a1a1a;border:1px solid #333;border-radius:6px;color:#fff;font-size:13px;padding:8px 10px;font-family:inherit}
+.ep-input:focus{outline:none;border-color:#F6C84C}
+.ep-row{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+.ep-row .ep-input{flex:1}
+.ep-row .ep-input.link{font-size:11px;color:#aaa}
+.ep-del{width:32px;height:32px;border-radius:6px;background:#cc2222;color:#fff;border:none;font-size:16px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:700}
+.ep-del:hover{background:#ff3333}
+.ep-add{width:100%;margin-top:8px;padding:10px;background:#1a1a1a;border:1px dashed #F6C84C;border-radius:8px;color:#F6C84C;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
+.ep-add:hover{background:#221f00}
+
+.ep-actions{display:flex;flex-direction:column;gap:10px;margin-top:16px;padding-bottom:80px}
+.ep-btn{padding:14px;border-radius:10px;border:none;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit}
+.ep-btn.save{background:#F6C84C;color:#000}
+.ep-btn.save:hover{background:#e0b43a}
+.ep-btn.export{background:#1a1a1a;color:#F6C84C;border:1px solid #F6C84C}
+.ep-btn.cancel{background:#222;color:#aaa}
+
+.ep-range-row{display:flex;align-items:center;gap:10px}
+.ep-range-row input[type=range]{flex:1;accent-color:#F6C84C}
+.ep-range-val{color:#F6C84C;font-size:13px;font-weight:700;min-width:36px;text-align:right}
+
+/* cat header row */
+.cat-header-row{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+.cat-header-row .ep-input{flex:1;font-size:12px}
+.cat-del-btn{width:32px;height:32px;border-radius:6px;background:#330000;color:#cc4444;border:1px solid #441111;font-size:16px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.cat-del-btn:hover{background:#550000}
+
+.ep-add-section{width:100%;padding:12px;background:#001a00;border:1px dashed #3a3;border-radius:8px;color:#3a3;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:14px}
+.ep-add-section:hover{background:#002a00}
+
+/* pixel script indicator */
+.pixel-ok{background:#001a00;border:1px solid #1a4a1a;border-radius:8px;padding:10px 12px;color:#4a4;font-size:11px;margin-bottom:14px;text-align:center}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="page" id="page">
+  <!-- content rendered by JS -->
+</div>
+
+<!-- Edit FAB -->
+<button class="edit-fab" id="fabBtn" title="Editar página">✏️</button>
+
+<!-- Edit Panel -->
+<div class="edit-panel" id="editPanel">
+  <p class="ep-title">✏️ EDITOR DA HUB PAGE</p>
+
+  <!-- Pixel indicator -->
+  <div class="pixel-ok">✅ Pixel 1375054894205566 + InitiateCheckout configurados</div>
+
+  <!-- TITLE -->
+  <div class="ep-block">
+    <p class="ep-label">TÍTULO PRINCIPAL</p>
+    <input class="ep-input" id="cfg-subtitle" placeholder="Linha acima (ex: GPS DA)">
+    <br><br>
+    <input class="ep-input" id="cfg-title" placeholder="Título dourado (ex: APROVAÇÃO)">
+    <br><br>
+    <input class="ep-input" id="cfg-tagline" placeholder="Subtítulo pequeno">
+    <br><br>
+    <p class="ep-label" style="margin-top:4px">TAMANHO DO TÍTULO DOURADO</p>
+    <div class="ep-range-row">
+      <input type="range" min="18" max="48" step="1" id="cfg-titleSize">
+      <span class="ep-range-val" id="cfg-titleSizeVal">30px</span>
+    </div>
+  </div>
+
+  <!-- SECTIONS -->
+  <div id="sectionsEditor"></div>
+
+  <!-- Add section -->
+  <button class="ep-add-section" id="addSectionBtn">+ ADICIONAR NOVA CATEGORIA</button>
+
+  <!-- Actions -->
+  <div class="ep-actions">
+    <button class="ep-btn save" id="saveBtn">💾  SALVAR ALTERAÇÕES</button>
+    <button class="ep-btn export" id="exportBtn">📤  EXPORTAR JSON (GPS Studio)</button>
+    <button class="ep-btn cancel" id="cancelBtn">✖  FECHAR SEM SALVAR</button>
+  </div>
+</div>
+
+<!-- META PIXEL -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init','1375054894205566');
+fbq('track','PageView');
+</script>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   DATA
+═══════════════════════════════════════════════════════════ */
+const DEFAULT = {
+  subtitle: "GPS DA",
+  title: "APROVAÇÃO",
+  tagline: "ESCOLHA SEU CONCURSO E GARANTA SEU MATERIAL",
+  titleSize: 30,
+  sections: [
+    {
+      id: "gcm",
+      label: "🏙️  GUARDAS MUNICIPAIS",
+      bg: "#0A0A0A",
+      buttons: [
+        {text:"📍  GCM ITAJAÍ SC   ›", link:"#"},
+        {text:"📍  GCM PORTO VELHO RO   ›", link:"#"},
+        {text:"📍  GCM ARACAJU SE   ›", link:"#"},
+        {text:"📍  GCM BRUMADINHO MG   ›", link:"#"},
+        {text:"📍  GCM POUSO ALEGRE MG   ›", link:"#"}
+      ]
+    },
+    {
+      id: "pm",
+      label: "🚔  POLÍCIAS MILITARES",
+      bg: "#111",
+      buttons: [
+        {text:"🚔  PMAL — ALAGOAS   ›", link:"#"},
+        {text:"🚔  PMES — ESPÍRITO SANTO   ›", link:"#"},
+        {text:"🚔  PMESP — SÃO PAULO   ›", link:"#"}
+      ]
+    },
+    {
+      id: "nac",
+      label: "📋  CONCURSOS NACIONAIS",
+      bg: "#0A0A0A",
+      buttons: [
+        {text:"🛡️  GPS GUARDAS MUNICIPAIS (GERAL)   ›", link:"#"},
+        {text:"📋  PPRS — POLÍCIA PENAL DO RS   ›", link:"#"},
+        {text:"⚖️  MPES — AGENTE DE APOIO   ›", link:"#"},
+        {text:"📊  IBGE   ›", link:"#"},
+        {text:"🎓  GPS PROFESSORES / PND   ›", link:"#"}
+      ]
+    }
+  ]
+};
+
+function loadData(){
+  try{
+    const s = localStorage.getItem('gps_hub');
+    return s ? JSON.parse(s) : JSON.parse(JSON.stringify(DEFAULT));
+  }catch(e){ return JSON.parse(JSON.stringify(DEFAULT)); }
+}
+function saveData(d){ localStorage.setItem('gps_hub', JSON.stringify(d)); }
+
+/* ═══════════════════════════════════════════════════════════
+   RENDER PAGE
+═══════════════════════════════════════════════════════════ */
+function renderPage(d){
+  const page = document.getElementById('page');
+  let html = `
+    <div class="header">
+      <div class="gold-bar"></div>
+      <div class="header-inner">
+        <div class="gps-sub">${esc(d.subtitle)}</div>
+        <div class="gps-title" style="font-size:${d.titleSize}px">${esc(d.title)}</div>
+        <div class="gps-tag">${esc(d.tagline)}</div>
+      </div>
+    </div>`;
+
+  d.sections.forEach(sec => {
+    html += `
+    <div class="section" style="background:${sec.bg}">
+      <div class="cat-label">${esc(sec.label)}</div>
+      <div class="cat-divider"></div>
+      <div class="btn-list">`;
+    sec.buttons.forEach(b => {
+      const href = b.link && b.link !== '#' ? b.link : 'javascript:void(0)';
+      html += `<a class="hub-btn" href="${href}">${esc(b.text)}</a>`;
+    });
+    html += `</div></div>`;
+  });
+
+  html += `
+    <div class="footer">
+      <div class="gold-bar"></div>
+      <div class="footer-brand">GPS da Aprovação</div>
+      <div class="footer-sub">Seu caminho direto para a aprovação</div>
+    </div>`;
+  page.innerHTML = html;
+
+  // InitiateCheckout on every Hotmart link
+  document.querySelectorAll('a[href*="pay.hotmart.com"]').forEach(a => {
+    a.addEventListener('click', () => {
+      if(typeof fbq !== 'undefined') fbq('track','InitiateCheckout');
+    });
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RENDER EDITOR
+═══════════════════════════════════════════════════════════ */
+function renderEditor(d){
+  document.getElementById('cfg-subtitle').value   = d.subtitle;
+  document.getElementById('cfg-title').value      = d.title;
+  document.getElementById('cfg-tagline').value    = d.tagline;
+  document.getElementById('cfg-titleSize').value  = d.titleSize;
+  document.getElementById('cfg-titleSizeVal').textContent = d.titleSize + 'px';
+
+  const container = document.getElementById('sectionsEditor');
+  container.innerHTML = '';
+
+  d.sections.forEach((sec, si) => {
+    const block = document.createElement('div');
+    block.className = 'ep-block';
+    block.dataset.si = si;
+
+    // Section header row
+    block.innerHTML = `
+      <div class="cat-header-row">
+        <input class="ep-input" data-field="seclabel" data-si="${si}" value="${escVal(sec.label)}" placeholder="Nome da categoria">
+        <button class="cat-del-btn" data-delsec="${si}" title="Remover categoria">✕</button>
+      </div>
+      <p class="ep-label">BOTÕES</p>
+      <div class="btn-editor" data-si="${si}">
+        ${sec.buttons.map((b,bi) => `
+          <div class="ep-row" data-bi="${bi}">
+            <div style="flex:1;display:flex;flex-direction:column;gap:4px">
+              <input class="ep-input" data-field="btntext" data-si="${si}" data-bi="${bi}" value="${escVal(b.text)}" placeholder="Texto do botão">
+              <input class="ep-input link" data-field="btnlink" data-si="${si}" data-bi="${bi}" value="${escVal(b.link)}" placeholder="Link Hotmart (pay.hotmart.com/...)">
+            </div>
+            <button class="ep-del" data-delbtn="${si}-${bi}" title="Remover botão">✕</button>
+          </div>`).join('')}
+      </div>
+      <button class="ep-add" data-addbtn="${si}">+ ADICIONAR BOTÃO NESTA CATEGORIA</button>`;
+
+    container.appendChild(block);
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════
+   READ EDITOR → DATA
+═══════════════════════════════════════════════════════════ */
+function readEditor(d){
+  d.subtitle   = document.getElementById('cfg-subtitle').value.trim();
+  d.title      = document.getElementById('cfg-title').value.trim();
+  d.tagline    = document.getElementById('cfg-tagline').value.trim();
+  d.titleSize  = parseInt(document.getElementById('cfg-titleSize').value);
+
+  // sections labels
+  document.querySelectorAll('[data-field="seclabel"]').forEach(el => {
+    const si = parseInt(el.dataset.si);
+    if(d.sections[si]) d.sections[si].label = el.value;
+  });
+  // button texts
+  document.querySelectorAll('[data-field="btntext"]').forEach(el => {
+    const si = parseInt(el.dataset.si), bi = parseInt(el.dataset.bi);
+    if(d.sections[si] && d.sections[si].buttons[bi])
+      d.sections[si].buttons[bi].text = el.value;
+  });
+  // button links
+  document.querySelectorAll('[data-field="btnlink"]').forEach(el => {
+    const si = parseInt(el.dataset.si), bi = parseInt(el.dataset.bi);
+    if(d.sections[si] && d.sections[si].buttons[bi])
+      d.sections[si].buttons[bi].link = el.value || '#';
+  });
+  return d;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   EXPORT JSON (GPS Studio format)
+═══════════════════════════════════════════════════════════ */
+function exportJSON(d){
+  const GOLD='#F6C84C', DARK='#0A0A0A', BX=14, BW=362, BH=54, BGAP=12;
+  const FIRST_Y=50, STEP=BH+BGAP;
+  const by = n => FIRST_Y + n*STEP;
+  const secH = n => by(n) + 20;
+
+  function mkShape(id,x,y,w,h,bg){
+    return {id,type:"shape",shape:"rect",x,y,w,h,bg,border:bg,bw:0,r:0,radius:0,z:1,op:1,opacity:1};
+  }
+  function mkText(id,x,y,w,h,text,fs,color,bold,align){
+    return {id,type:"text",x,y,w,h,text,font:"Montserrat",fs,color,align:align||"center",bold:!!bold,italic:false,z:2,op:1,opacity:1,revealEnabled:false,revealDir:"left",fx:""};
+  }
+  function mkBtn(id,x,y,w,h,text,link){
+    return {id,type:"button",x,y,w,h,text,link:link||"#",font:"Montserrat",fs:13,bg:GOLD,color:DARK,radius:10,bold:true,align:"center",z:10,op:1,opacity:1,border:GOLD,bw:1,revealEnabled:false,revealDir:"pop",fx:""};
+  }
+
+  const sections = [];
+
+  // Header
+  sections.push({id:"hub_s01",name:"Header",bg:"#000000",h:152,els:[
+    mkShape("hub_e001",0,0,390,6,GOLD),
+    mkText("hub_e002",0,28,390,26,d.subtitle,20,"#FFFFFF",false),
+    mkText("hub_e003",0,56,390,40,d.title,d.titleSize,GOLD,true),
+    mkText("hub_e004",14,108,362,18,d.tagline,9,"#555555",false),
+    mkShape("hub_e005",0,146,390,6,DARK),
+  ]});
+
+  // Content sections
+  d.sections.forEach((sec,si) => {
+    const els = [
+      mkShape(`s${si}_div`,0,0,390,1,"#2A2A2A"),
+      mkText(`s${si}_lbl`,14,14,362,22,sec.label,11,GOLD,true,"left"),
+      mkShape(`s${si}_div2`,0,40,390,1,"#222222"),
+    ];
+    sec.buttons.forEach((b,bi) => {
+      els.push(mkBtn(`s${si}_b${bi}`,BX,by(bi),BW,BH,b.text,b.link));
+    });
+    sections.push({id:`hub_s${si+2}`,name:sec.label.replace(/[^\w\s]/g,'').trim(),bg:sec.bg,h:secH(sec.buttons.length),els});
+  });
+
+  // Footer
+  sections.push({id:"hub_sf",name:"Footer",bg:"#000000",h:72,els:[
+    mkShape("hub_ef1",0,0,390,3,GOLD),
+    mkText("hub_ef2",0,16,390,20,"GPS da Aprovação",11,GOLD,true),
+    mkText("hub_ef3",0,38,390,18,"Seu caminho direto para a aprovação",9,"#555555",false),
+  ]});
+
+  const json = {
+    sections,desktopSections:[],popups:[],zoom:1,editMode:"mobile",
+    publish:{domain:"https://gpsdaaprovacao.com",slug:"materiais",mode:"subdomain",project:"Hub — Todos os Materiais GPS da Aprovação"},
+    seoUrl:"https://materiais.gpsdaaprovacao.com/",seoSiteName:"GPS da Aprovação",
+    seoTitle:"GPS da Aprovação — Encontre Seu Material",
+    seoDesc:"Materiais estratégicos para concursos.",seoDescription:"Materiais estratégicos para concursos.",
+    brandName:"GPS da Aprovação",
+    tracking:{fbPixelId:"1375054894205566",customScript:"document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('a[href*=\"pay.hotmart.com\"]').forEach(function(a){a.addEventListener('click',function(){if(typeof fbq!=='undefined'){fbq('track','InitiateCheckout');}})});});"},
+    stickyBar:{enabled:false},performance:{optimized:true}
+  };
+
+  const blob = new Blob([JSON.stringify(json,null,2)],{type:"application/json"});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'HUB - TODOS OS MATERIAIS GPS DA APROVAÇÃO.json';
+  a.click();
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MAIN
+═══════════════════════════════════════════════════════════ */
+let data = loadData();
+renderPage(data);
+
+// FAB toggle
+document.getElementById('fabBtn').addEventListener('click', () => {
+  renderEditor(JSON.parse(JSON.stringify(data)));
+  document.getElementById('editPanel').classList.add('open');
+  document.getElementById('fabBtn').textContent = '✖';
+});
+
+// Title size slider live
+document.getElementById('cfg-titleSize').addEventListener('input', function(){
+  document.getElementById('cfg-titleSizeVal').textContent = this.value + 'px';
+});
+
+// Cancel
+document.getElementById('cancelBtn').addEventListener('click', () => {
+  document.getElementById('editPanel').classList.remove('open');
+  document.getElementById('fabBtn').textContent = '✏️';
+});
+
+// Save
+document.getElementById('saveBtn').addEventListener('click', () => {
+  data = readEditor(data);
+  saveData(data);
+  renderPage(data);
+  document.getElementById('editPanel').classList.remove('open');
+  document.getElementById('fabBtn').textContent = '✏️';
+  // Flash confirmation
+  const fab = document.getElementById('fabBtn');
+  fab.textContent = '✅';
+  setTimeout(()=>fab.textContent='✏️', 1500);
+});
+
+// Export
+document.getElementById('exportBtn').addEventListener('click', () => {
+  data = readEditor(data);
+  exportJSON(data);
+});
+
+// Add section
+document.getElementById('addSectionBtn').addEventListener('click', () => {
+  data = readEditor(data);
+  data.sections.push({
+    id: 'sec_' + Date.now(),
+    label: '📌  NOVA CATEGORIA',
+    bg: data.sections.length % 2 === 0 ? '#0A0A0A' : '#111',
+    buttons: [{text:'Novo botão   ›', link:'#'}]
+  });
+  renderEditor(data);
+});
+
+// Delegated events inside editor
+document.getElementById('sectionsEditor').addEventListener('click', e => {
+  // Delete section
+  if(e.target.dataset.delsec !== undefined){
+    const si = parseInt(e.target.dataset.delsec);
+    data = readEditor(data);
+    data.sections.splice(si, 1);
+    renderEditor(data);
+    return;
+  }
+  // Delete button
+  if(e.target.dataset.delbtn !== undefined){
+    const [si, bi] = e.target.dataset.delbtn.split('-').map(Number);
+    data = readEditor(data);
+    data.sections[si].buttons.splice(bi, 1);
+    renderEditor(data);
+    return;
+  }
+  // Add button
+  if(e.target.dataset.addbtn !== undefined){
+    const si = parseInt(e.target.dataset.addbtn);
+    data = readEditor(data);
+    data.sections[si].buttons.push({text:'Novo botão   ›', link:'#'});
+    renderEditor(data);
+    return;
+  }
+});
+
+// Helpers
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function escVal(s){ return String(s||'').replace(/"/g,'&quot;'); }
+</script>
+</body>
+</html>
