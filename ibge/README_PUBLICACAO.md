@@ -2,4 +2,4 @@
 
 Slug: ibge
 URL prevista: https://ibge.gpsdaaprovacao.com/
-Gerado em: 04/08/2026, 14:27:16
+Gerado em: 12/08/2026, 18:45:25
