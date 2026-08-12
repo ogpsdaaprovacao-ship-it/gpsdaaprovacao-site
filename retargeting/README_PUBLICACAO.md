@@ -2,4 +2,4 @@
 
 Slug: retargeting
 URL prevista: https://retargeting.gpsdaaprovacao.com/
-Gerado em: 12/08/2026, 19:29:48
+Gerado em: 12/08/2026, 20:03:36
